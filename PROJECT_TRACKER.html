@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Tracking Master Guide & Roadmap</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0d14;
+      --card-bg: rgba(18, 24, 38, 0.75);
+      --card-border: rgba(99, 102, 241, 0.2);
+      --accent-primary: #6366f1;
+      --accent-secondary: #06b6d4;
+      --accent-glow: rgba(99, 102, 241, 0.35);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --code-bg: #030712;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.12) 0px, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.7;
+      padding: 2rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    }
+
+    .badge-stack {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .badge {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.25rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.15);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .badge.active {
+      background: rgba(16, 185, 129, 0.15);
+      color: #6ee7b7;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    h1 {
+      font-size: 2.3rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.6rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    /* Grid Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 1.8rem;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .card-title svg {
+      width: 24px;
+      height: 24px;
+      color: var(--accent-secondary);
+    }
+
+    /* Milestone Timeline */
+    .milestone {
+      border-right: 3px solid rgba(99, 102, 241, 0.3);
+      padding-right: 1.2rem;
+      margin-right: 0.8rem;
+      margin-bottom: 1.8rem;
+      position: relative;
+    }
+
+    .milestone::before {
+      content: '';
+      position: absolute;
+      right: -8px;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .milestone.completed {
+      border-right-color: var(--success);
+    }
+    .milestone.completed::before {
+      background: var(--success);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    .milestone-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 0.8rem;
+    }
+
+    /* Tasks Checklists */
+    .task-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+
+    .task-item:hover {
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .task-item.active {
+      border-color: rgba(99, 102, 241, 0.5);
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    .task-checkbox {
+      margin-top: 0.25rem;
+      accent-color: var(--accent-primary);
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    /* Highlight Active Box */
+    .focus-box {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .focus-tag {
+      position: absolute;
+      top: -12px;
+      right: 18px;
+      background: linear-gradient(90deg, #6366f1, #06b6d4);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Code Blocks */
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin: 1rem 0;
+      direction: ltr;
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      color: #e2e8f0;
+      line-height: 1.6;
+    }
+
+    .keyword { color: #f472b6; font-weight: 600; }
+    .type { color: #38bdf8; }
+    .function { color: #fbbf24; }
+    .comment { color: #64748b; font-style: italic; }
+    .string { color: #4ade80; }
+
+    /* Tips & Warning callouts */
+    .callout {
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      margin: 1rem 0;
+      display: flex;
+      gap: 0.8rem;
+      align-items: flex-start;
+      font-size: 0.92rem;
+    }
+
+    .callout-tip {
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      color: #67e8f9;
+    }
+
+    .callout-warn {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fde68a;
+    }
+
+    /* Rules Card */
+    .rule-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+    .rule-item span.icon {
+      color: var(--accent-primary);
+      font-size: 1.1rem;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="badge-stack">
+        <span class="badge active">● التتبع النشط (Active Mentorship)</span>
+        <span class="badge">Flutter + flutter_map</span>
+        <span class="badge">Supabase Realtime</span>
+        <span class="badge">Geolocator</span>
+      </div>
+      <h1>دليل ومعمارية تطبيق Live Tracking 🚀</h1>
+      <p class="subtitle">مرجعك الدائم، التفاعلي والمباشر لمتابعة مراحل بناء التطبيق بالكامل خطوة بخطوة وكتابة كل سطر بإتقان.</p>
+    </header>
+
+    <div class="dashboard-grid">
+      <!-- Main Content / Active Task & Roadmap -->
+      <main>
+        
+        <!-- Active Focus Box -->
+        <div class="focus-box">
+          <div class="focus-tag">المهمة الحالية الآن</div>
+          <h2 style="font-size: 1.4rem; margin-bottom: 0.5rem; color: #fff;">Milestone 1 - الخطوة 1.1: تصميم جدول المواقع في Supabase</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            الهدف: إنشاء جدول خفيف في PostgreSQL مخصص لتخزين آخر موقع لكل جهاز مع دعم الـ Upsert والتحديث اللحظي الفوري.
+          </p>
+
+          <div class="callout callout-tip">
+            💡 <strong>فكرة التصميم:</strong> لا تقم بعمل `INSERT` جديد لكل تحرك، لأن ذلك سيملأ قاعدة البيانات بملايين السجلات بسرعة! سنصمم صفاً واحداً لكل مستخدم يتم تحديثه دائماً (`UPSERT`).
+          </div>
+
+          <h3 style="font-size: 1.05rem; margin-top: 1.2rem; margin-bottom: 0.5rem; color: #a5b4fc;">
+            هيكل الـ SQL الاسترشادي (الهيكل البنائي المطلوب منك إكماله):
+          </h3>
+
+          <div class="code-container">
+<span class="comment">-- 1. جدول المواقع الحية</span>
+<span class="keyword">CREATE TABLE</span> public.locations (
+    id <span class="type">UUID</span> <span class="keyword">DEFAULT</span> <span class="function">gen_random_uuid</span>() <span class="keyword">PRIMARY KEY</span>,
+    user_id <span class="type">TEXT</span> <span class="keyword">UNIQUE NOT NULL</span>,         <span class="comment">-- مفتاح فريد لكل جهاز/مستخدم لتسهيل الـ Upsert</span>
+    latitude <span class="type">DOUBLE PRECISION NOT NULL</span>,  <span class="comment">-- خط العرض بدقة عائمة مزدوجة</span>
+    longitude <span class="type">DOUBLE PRECISION NOT NULL</span>, <span class="comment">-- خط الطول</span>
+    heading <span class="type">DOUBLE PRECISION</span> <span class="keyword">DEFAULT</span> 0.0,   <span class="comment">-- زاوية التوجيه (0-360) للماركر</span>
+    speed <span class="type">DOUBLE PRECISION</span> <span class="keyword">DEFAULT</span> 0.0,     <span class="comment">-- السرعة الحالية (م/ث أو كم/س)</span>
+    updated_at <span class="type">TIMESTAMPTZ</span> <span class="keyword">DEFAULT</span> <span class="function">now</span>()   <span class="comment">-- توقيت آخر تحديث</span>
+);
+          </div>
+
+          <div class="callout callout-warn">
+            ⚠️ <strong>تحذير تقني (Gotcha):</strong>
+            تأكد من وضع <code>UNIQUE</code> على <code>user_id</code>، لأن مكتبة Supabase في فلاتر عندما تستخدم <code>upsert()</code> تحتاج لعمود فريد (onConflict) لتعرف هل تقوم بالتعديل (Update) أم الإضافة (Insert).
+          </div>
+        </div>
+
+        <!-- Milestones Overview -->
+        <div class="card">
+          <div class="card-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            خارطة الطريق الكاملة (Milestones Roadmap)
+          </div>
+
+          <!-- M1 -->
+          <div class="milestone">
+            <div class="milestone-title">📌 Milestone 1: إعداد قاعدة البيانات والـ Realtime في Supabase</div>
+            <ul class="task-list">
+              <li class="task-item active">
+                <input type="checkbox" class="task-checkbox" id="t1_1">
+                <label for="t1_1"><strong>الخطوة 1.1:</strong> تصميم جدول الإحداثيات (Schema) في Supabase SQL Editor. <em>(جارية الآن)</em></label>
+              </li>
+              <li class="task-item">
+                <input type="checkbox" class="task-checkbox" id="t1_2">
+                <label for="t1_2"><strong>الخطوة 1.2:</strong> ضبط الـ Row Level Security (RLS) وسياسات القراءة والكتابة.</label>
+              </li>
+              <li class="task-item">
+                <input type="checkbox" class="task-checkbox" id="t1_3">
+                <label for="t1_3"><strong>الخطوة 1.3:</strong> تفعيل الـ Realtime Publication على الجدول لبث التغييرات للعملاء.</label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- M2 -->
+          <div class="milestone">
+            <div class="milestone-title">📌 Milestone 2: محرك التتبع المحلي في Flutter (Geolocator)</div>
+            <ul class="task-list">
+              <li class="task-item">
+                <input type="checkbox" class="task-checkbox" id="t2_1">
+                <label for="t2_1"><strong>الخطوة 2.1:</strong> تهيئة أذونات الموقع في AndroidManifest.xml و Info.plist.</label>
+              </li>
+              <li class="task-item">
+                <input type="checkbox" class="task-checkbox" id="t2_2">
+                <label for="t2_2"><strong>الخطوة 2.2:</strong> فحص إذن الموقع وتفعيل خدمة الـ GPS والتعامل مع حالات الرفض.</label>
+              </li>
+              <li class="task-item">
+                <input type="checkbox" class="task-checkbox" id="t2_3">
+                <label for="t2_3"><strong>الخطوة 2.3:</strong> بناء Location Stream باستهلاك طاقة ذكي (DistanceFilter & Accuracy).</label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- M3 -->
+          <div class="milestone">
+            <div class="milestone-title">📌 Milestone 3: الربط اللحظي مع Supabase (Live Streaming)</div>
+            <ul class="task-list">
+              <li class="task-item">
+                <input type="checkbox" class="task-checkbox" id="t3_1">
+                <label for="t3_1"><strong>الخطوة 3.1:</strong> تهيئة Supabase Client وتخزين الـ Keys في التطبيق.</label>
+              </li>
+              <li class="task-item">
+                <input type="checkbox" class="task-checkbox" id="t3_2">
+                <label for="t3_2"><strong>الخطوة 3.2:</strong> إرسال تحديثات الموقع لحظياً (Upsert Stream).</label>
+              </li>
+              <li class="task-item">
+                <input type="checkbox" class="task-checkbox" id="t3_3">
+                <label for="t3_3"><strong>الخطوة 3.3:</strong> الاستماع لتحديثات المواقع واستقبالها عبر Supabase Realtime Channel.</label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- M4 -->
+          <div class="milestone">
+            <div class="milestone-title">📌 Milestone 4: واجهة الخريطة الحية (Flutter Map + OSM)</div>
+            <ul class="task-list">
+              <li class="task-item">
+                <input type="checkbox" class="task-checkbox" id="t4_1">
+                <label for="t4_1"><strong>الخطوة 4.1:</strong> إعداد Flutter Map بطبقات OpenStreetMap بدون API Key.</label>
+              </li>
+              <li class="task-item">
+                <input type="checkbox" class="task-checkbox" id="t4_2">
+                <label for="t4_2"><strong>الخطوة 4.2:</strong> رسم وتحريك الـ Marker الخاص بالجهاز لحظياً.</label>
+              </li>
+              <li class="task-item">
+                <input type="checkbox" class="task-checkbox" id="t4_3">
+                <label for="t4_3"><strong>الخطوة 4.3:</strong> تنعيم حركة الماركر (Smooth Interpolation) وتوجيهه مع زاوية الحركة.</label>
+              </li>
+            </ul>
+          </div>
+
+          <!-- M5 -->
+          <div class="milestone">
+            <div class="milestone-title">📌 Milestone 5: الصقل، إدارة الموارد والتطبيق النهائي</div>
+            <ul class="task-list">
+              <li class="task-item">
+                <input type="checkbox" class="task-checkbox" id="t5_1">
+                <label for="t5_1"><strong>الخطوة 5.1:</strong> معالجة انقطاع الشبكة وإعادة التوصيل التلقائي.</label>
+              </li>
+              <li class="task-item">
+                <input type="checkbox" class="task-checkbox" id="t5_2">
+                <label for="t5_2"><strong>الخطوة 5.2:</strong> التأكد من غلق الـ Streams لمنع الـ Memory Leaks.</label>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+      </main>
+
+      <!-- Sidebar -->
+      <aside>
+        <!-- Mentorship Rules -->
+        <div class="card">
+          <div class="card-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            قواعد الإرشاد والتعلم
+          </div>
+          <div class="rule-item">
+            <span class="icon">✍️</span>
+            <div><strong>أنت تكتب الكود:</strong> كتابة كل سطر بنفسك تضمن ترسيخ المفهوم في عقلك.</div>
+          </div>
+          <div class="rule-item">
+            <span class="icon">🧭</span>
+            <div><strong>توجيه ومساعدة كاملة:</strong> هشرح لك كل دالة وسبب استخدامها وبنيتها، ومش هسيبك تايه أبداً.</div>
+          </div>
+          <div class="rule-item">
+            <span class="icon">🔍</span>
+            <div><strong>مراجعة معمارية صارمة:</strong> نتأكد سوا من الأمان، استهلاك البطارية، والـ Streams.</div>
+          </div>
+        </div>
+
+        <!-- Supabase Cheat Sheet -->
+        <div class="card">
+          <div class="card-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            مفاهيم سريعة في Supabase
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.8rem;">
+            <strong>ما هو Supabase؟</strong> عبارة عن قاعدة بيانات <strong>PostgreSQL</strong> سحابية مضافاً إليها محرك WebSockets جاهز (Realtime Engine) وواجهات REST تلقائية.
+          </p>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.8rem;">
+            <strong>الـ Realtime:</strong> بدلاً من أن تقوم بعمل Polling (طلب الموقع كل ثانية من السيرفر)، السيرفر نفسه هو من يرسل التحديث للموبايل بمجرد تغير الصف في قاعدة البيانات عبر WebSocket خفيف وسريع.
+          </p>
+        </div>
+
+      </aside>
+    </div>
+
+    <footer>
+      Live Tracking Masterclass © 2026 - نظام التعلم والمتابعة الشخصي
+    </footer>
+  </div>
+
+  <script>
+    // حفظ حالة الـ checkboxes في الـ LocalStorage ليظل التقدم محفوظاً
+    document.querySelectorAll('.task-checkbox').forEach(box => {
+      const saved = localStorage.getItem('task_' + box.id);
+      if (saved === 'true') box.checked = true;
+      box.addEventListener('change', () => {
+        localStorage.setItem('task_' + box.id, box.checked);
+      });
+    });
+  </script>
+</body>
+</html>
